@@ -1,0 +1,197 @@
+.ui-tree{
+	border:0;	
+}
+
+
+.displayButton {
+	position: relative; 
+	left:2px;
+	top:4px;
+}
+
+ul#css3menu1 li.topmenuAnalyses > a, ul#css3menu1 li.topmenuAnalyses
+{
+border-top-width: 2px;
+border-right-width-value: 1px;
+border-bottom-width: 1px;
+border-left-width-value: 1px;
+border-top-style: solid;
+border-right-style-value: solid;
+border-bottom-style: solid;
+border-left-style-value: solid;
+border-top-color: white;
+border-right-color-value: #2CA1CB;
+border-bottom-color: #CCC;
+border-left-color-value: #2CA1CB;
+-moz-box-shadow: 0 0 10px white,0 3px 0 #0E3871,0 5px 0 white,0 5px 3px #CCC;
+-webkit-box-shadow: 0 0 10px white,0 3px 0 #0E3871,0 5px 0 white,0 5px 3px #CCC;
+box-shadow: 0 0 10px white,0 3px 0 #0E3871,0 5px 0 white,0 5px 3px #CCC;
+background-color: #3DB6E3;
+
+-moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+}
+
+/* dark blue 3DB6E3 blue 3CB6E2 light blue 89f5ff gray 333 */
+
+
+.ui-state-highlight {
+border: 1px solid #c9eefc!important;
+background: #AAA;
+
+background: #c9eefc  linear-gradient(top, rgba(0, 0, 0, 0.25), transparent)!important;
+background: #c9eefc -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.25)), to(transparent))!important;
+background: #c9eefc -moz-linear-gradient(top, rgba(0, 0, 0, 0.25), transparent)!important;
+
+
+color: black!important;
+text-shadow: 1px 1px 1px #FFF!important;
+font-weight:800;
+font-color:#000000!important;
+
+}
+
+
+div.westpanel div.ui-widget-content{
+/*	overflow: auto;	*/
+}
+
+div.westpanel div.ui-widget-content .nav{
+  	margin-right: 18px;
+    position: relative;
+    right: -143px;
+    text-align: right;
+    top: -30px;
+    width: 218px;
+}
+
+div.signin{
+	text-align: center;
+}
+
+
+
+span.wfdragitem{
+	background-attachment: scroll;
+	background-color: transparent;
+	background-image: none;
+	background-position: 0 0;
+	background-repeat: repeat-y;
+	list-style: none outside none;
+	margin: 0;
+	padding: 1px 0 0;
+	
+	white-space: nowrap;
+	
+	font-size: 1em;
+	color: #4F4F4F;
+	cursor: pointer;
+	font-family: Arial,sans-serif;
+	text-align: left;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+span.wfdragInvalidItem{
+	cursor: no-drop!important;
+}
+
+span.wfdragitem span.wfdragicon{
+	display: inline-block;
+	height: 16px;
+	width: 16px;
+}
+
+span.wfdragitem span.wfdraglabel{
+	display: inline-block;
+	margin: 2px 0 0;
+	padding: 0 3px;
+	vertical-align: top;
+}
+
+div.wfdrop-active{
+	border: 2px solid #7096AB!important;
+}
+
+div.wfdrop-highlight{
+	border: 2px solid #C9EEFC!important;
+}
+
+a.dataTableCentered{
+	margin: 0 auto;
+	text-align: center;
+}
+
+div.westpanel div.ui-widget-content .waveformTree{
+	width: 99%;
+	height: 440px;
+	overflow: auto;
+}
+
+td.queuePhaseColumn span , div.summary span, div.summary ul, td.recordName div, td.recordName span{
+	float:left
+}
+
+td.queuePhaseColumn a , div.summary a{
+	float:right;
+}
+
+td.queuePhaseColumn .DONE{
+	font-weight: bold!important;
+	color: green;
+}
+td.queuePhaseColumn span.DONE a:link {text-decoration: none;color: green;}
+td.queuePhaseColumn span.DONE a:active {text-decoration: none;color: green;}
+td.queuePhaseColumn span.DONE a:visited {text-decoration: none;color: green;}
+td.queuePhaseColumn span.DONE a:hover {text-decoration: underline;color: green;}
+
+td.queuePhaseColumn .ERROR{
+	font-weight: bold!important;
+	color: red;
+}
+td.queuePhaseColumn span.ERROR a:link {text-decoration: none;color: red;}
+td.queuePhaseColumn span.ERROR a:active {text-decoration: none;color: red;}
+td.queuePhaseColumn span.ERROR a:visited {text-decoration: none;color: red;}
+td.queuePhaseColumn span.ERROR a:hover {text-decoration: underline;color: red;}
+
+td.queuePhaseColumn .WARN{
+	font-weight: bold!important;
+	color: rgb(243, 206, 12);
+}
+td.queuePhaseColumn span.WARN a:link {text-decoration: none;color: rgb(243, 206, 12);}
+td.queuePhaseColumn span.WARN a:active {text-decoration: none;color: rgb(243, 206, 12);}
+td.queuePhaseColumn span.WARN a:visited {text-decoration: none;color: rgb(243, 206, 12);}
+td.queuePhaseColumn span.WARN a:hover {text-decoration: underline;color: rgb(243, 206, 12);}
+
+span.panelHeaderText{
+	position: absolute;
+	padding: 0.4em 0.2em 0.4em 0.4em;
+	left: 0;
+}
+
+
+div.ui-dialog-content{
+	text-align: center;
+}
+
+img.transferFileMessage{
+	width: 50px;
+	margin-top: 10px;
+	position: absolute;
+	left: 64px;
+}
+
+span.transferFileMessage{
+	position: relative;
+	top: 75px;
+}
+
+div.principalHeader{
+	text-align: right;
+	margin-bottom: 2px;
+	position: relative;
+}
+
+backgroundQueueTable{
+	width: 100%;
+}

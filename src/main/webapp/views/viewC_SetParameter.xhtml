@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+
+<f:view contentType="text/html" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:head />
+	<h:body>
+
+		<h:panelGroup id="paramEdit" layout="block" styleClass="backgroundofContent">
+		<h:outputLabel value="Algorithm Options for #{algorithm.displayShortName} size:#{algorithm.parameterList.size()}"/>
+							
+			<h:form id="formAlgorithmEditParam">
+				<p:dataTable id="optionalParameterTable"
+					var="p"
+					value="#{algorithmEditBacking.parameterList}"
+					rowKey="#{p.displayShortName}"
+					paginator="true" 
+					rows="10"
+					rowIndexVar="indexParam"
+					resizableColumns="true" 
+					resizable="false"										
+					collapsible="false" 
+					paginatorAlwaysVisible="false"
+					paginatorPosition="top"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15,20" 
+					emptyMessage="No parameter options found for this algorithm">
+					
+					<p:column headerText="ID"  style="width:20px;">
+						<h:outputLabel 
+							value="#{p.id}"  
+							title="Optional Parameter's ID in the database (Primary Key)" />
+					</p:column>
+ 
+					<p:column headerText="Name" style="width:100px;">
+						<h:outputLabel 
+							value="#{p.displayShortName}"
+							title="Short name to be displayed in user interface lists.(150 characters maximum)" />
+					</p:column>
+
+					<p:column headerText="Type" style="width:50px;">
+						<h:outputLabel 
+							value="#{p.type}" 
+							title="The options are: text, integer, float, boolean, select, data_column, or drill_down." />
+					</p:column>
+
+					<p:column headerText="Optional" style="width:50px;">
+						<h:outputLabel 
+							value="#{p.optional}" />
+					</p:column>
+
+					<p:column headerText="Validator" style="width:50px;">
+						<h:outputLabel 
+							value="#{p.validator.typetext}" 
+							title="#{p.validator.message} min:#{p.validator.min} max:#{p.validator.max}"/>
+					</p:column>
+
+					<p:column headerText="Tooltip" style="width:200px;">
+						<h:outputLabel 
+							value="#{p.toolTipDescription}"
+							title="#{p.toolTipDescription}"/>								
+					</p:column>
+
+					<p:column headerText="Description">
+						<h:outputLabel 
+							value="#{p.longDescription}"
+							title="#{p.longDescription}"/>								
+					</p:column>
+					<p:column  style="width:40px;">
+					    <p:commandButton id="BtnParamEdit" value="Edit" type="button" />
+						<p:overlayPanel id="paramEditPanel" for="BtnParamEdit" hideEffect="fade" dynamic="true" style="width:1000px;height:600px"  showCloseIcon="true">
+							<p:panelGrid>
+							    <f:facet name="header">
+							        <p:row>
+							            <p:column colspan="2">Edit Optional parameter then Update</p:column>
+							        </p:row>												 
+							    </f:facet>   													
+											
+								<p:row>
+	 								<p:column width="50px" resizable="true"  ><h:outputLabel value ="ID"/> </p:column>
+									<p:column >
+										<h:outputText 
+											value="#{p.id}" 
+											title="Optional Parameter's ID in the database (Primary Key)" />
+									 </p:column>
+			 					</p:row>
+								<p:row>
+	 								<p:column><h:outputLabel value ="Name"/></p:column>
+									<p:column >
+										<h:inputText 
+										value="#{p.displayShortName}" 
+										size="50"/>
+									 </p:column>
+			 					</p:row>
+
+								<p:row>
+	 								<p:column><h:outputLabel value ="Type"/></p:column>
+									<p:column headerText="Type" style="width:50px;">
+										<p:selectOneMenu id="paramTypeListMenu" value="#{p.type}">
+											<f:selectItem itemLabel="text" itemValue="text" itemDescription="Free text entry, limited by the validation contraints."/>
+											<f:selectItem itemLabel="integer" itemValue="integer" itemDescription="Parameter may be a single integer number, subject to the validation constraints."/>
+											<f:selectItem itemLabel="float" itemValue="float"  itemDescription="Parameter may be a single integer number, subject to the validation constraints."/>
+											<f:selectItem itemLabel="boolean" itemValue="boolean"  itemDescription="Parameter will be a checkbox, with a checked box returning a logical TRUE."/>
+											<f:selectItem itemLabel="select" itemValue="select"  itemDescription="Selection list."/>
+											<f:selectItem itemLabel="data_column" itemValue="data_column"  itemDescription="."/>
+											<f:selectItem itemLabel="drill_down" itemValue="drill_down"  itemDescription="."/>
+										</p:selectOneMenu>
+									</p:column>
+			 					</p:row>
+
+								<p:row>
+	 								<p:column width="50px" ><h:outputLabel value ="Default Value"/></p:column>
+									<p:column headerText="Optional" style="width:50px;">
+										<p:inputText value="#{p.parameterDefaultValue}" />
+									</p:column>
+			 					</p:row>
+
+								<p:row>
+	 								<p:column><h:outputLabel value ="Optional"/></p:column>
+									<p:column headerText="Optional" style="width:50px;">
+										<p:selectBooleanCheckbox value="#{p.optional}" />
+									</p:column>
+			 					</p:row>
+
+								<p:row>
+	 								<p:column><h:outputLabel value ="Validator Type"/></p:column>
+									<p:column headerText="Validator" style="width:50px;">
+										<p:selectOneMenu id="validationTypeListMenu" value="#{p.validator.typetext}">
+											<f:selectItem itemLabel="Regular Expression" itemValue="regex" />
+											<f:selectItem itemLabel="Number Range" itemValue="in_range" />
+											<f:selectItem itemLabel="Length Range" itemValue="length" />
+										</p:selectOneMenu>
+									</p:column>
+			 					</p:row>
+			
+								<p:row>
+	 								<p:column width="50px" ><h:outputLabel value ="Min and Max values"/></p:column>
+									<p:column >
+											<h:outputText value="Minimum: "/> <h:inputText value="#{p.validator.min}" size="6"/>
+											<h:outputText value="  Maximum: "/> <h:inputText value="#{p.validator.max}" size="6" />
+									</p:column>
+			 					</p:row>
+			
+								<p:row>
+	 								<p:column><h:outputLabel value ="Regex Expression"/></p:column>
+									<p:column>
+										<h:inputText value="#{p.validator.regex}" size="150"/>
+									</p:column>
+			 					</p:row>
+			
+								<p:row>
+	 								<p:column><h:outputLabel value ="Tooltip"/></p:column>
+									<p:column >
+										<h:inputText 
+										value="#{p.toolTipDescription}"
+										size="150"/>
+									 </p:column>
+			 					</p:row>	
+
+								<p:row>
+	 								<p:column><h:outputLabel value ="Description"/></p:column>
+									<p:column >
+										<h:inputText 
+										value="#{p.longDescription}"
+										size="150"/>
+									 </p:column>
+			 					</p:row>
+									
+								<p:row>
+	 								<p:column colspan="2">
+		 								<p:commandButton value="Update Option"
+                							action="#{algorithmEditBacking.updateParameter(p.id)}" />
+									</p:column>
+			 					</p:row>										 
+               				</p:panelGrid>		
+ 						</p:overlayPanel>						
+					</p:column>
+					
+				</p:dataTable>	
+								
+			</h:form>
+		</h:panelGroup>
+
+	</h:body>
+</f:view>

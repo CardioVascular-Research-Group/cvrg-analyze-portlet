@@ -1,0 +1,254 @@
+<?xml version="1.0"?>
+
+<f:view contentType="text/html"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:head />
+	<h:body>
+
+	<h:panelGroup id="mainGroup" layout="block" styleClass="backgroundofContent">
+		
+		<h:form id="dialogForm">
+			<p:remoteCommand name="updateDialog" action="#{analyzeBacking.generateParameterSetting}" update="optionsDlg" oncomplete="PF('optionsDlg').show();">
+				<f:param name="algorithmId" value="0"/>
+			</p:remoteCommand>
+			<p:dialog id="optionsDlg" header="Options" widgetVar="optionsDlg" modal="true" width="70%">
+				<h:panelGroup id="dialogContent"/>
+				<p:panel title="parameter settings" id="settingTab">
+					<p:commandButton id="BtnParamSave" value="Save" action="#{analyzeBacking.saveSelectedSettings}" oncomplete="updateAlgorithms()"/>
+					<p:commandButton id="BtnParamCancel" value="Cancel" onclick="PF('optionsDlg').hide();"/>
+					<p:commandButton value="Reset" action="#{analyzeBacking.resetSelectedSettings}" oncomplete="updateAlgorithms()"/>
+				</p:panel>
+			</p:dialog>
+		</h:form>
+		
+		<h:form id="errorPanelForm">
+			<p:remoteCommand name="updateErrorPanel" action="#{analyzeBacking.generateErrorPanel}" update="panelContent" oncomplete="PF('commonErrorPanel').show();">
+				<f:param name="docId" value="0"/>
+				<f:param name="x" value="0"/>
+				<f:param name="y" value="0"/>
+			</p:remoteCommand>
+			<p:dialog id="commonErrorPanel" position="1399,320" styleClass="commonErrorPanelDlg" header="Error Messages" widgetVar="commonErrorPanel" width="400" resizable="false" minHeight="130" >
+			    <h:panelGroup id="panelContent"/>
+		    </p:dialog>
+	    </h:form>
+	
+		<h:form id="formAnalyze">
+			
+			<h:panelGroup rendered="#{analyzeBacking.user != null}">
+				
+				<p:remoteCommand name="treeToTable" actionListener="#{analyzeBacking.treeToTable}" update="availableStudy" oncomplete="initDragDrop()"/>
+				
+				<p:dialog header="WAIT" widgetVar="dlg2" modal="true" height="100" closable="false" resizable="false">
+					<p:graphicImage value="/image/loader1.gif" styleClass="transferFileMessage"></p:graphicImage>
+				    <span class="transferFileMessage"><h:outputText value="Please wait, preparing files." /></span>
+				</p:dialog> 
+				
+				<p:layout id="layoutAnalyze" style="width:100%;height:600px" >
+			
+					<p:layoutUnit styleClass="westpanel" position="west" header="Drag and drop folders or files to be Analyzed" resizable="true" size="385" minSize="385" maxSize="600" collapsible="true" >
+	
+						<p:tree id="docTree" 
+							styleClass="waveformTree"							
+							dynamic="true"
+							selection="#{analyzeBacking.fileTree.selectedNode}"
+							selectionMode="single"
+							value="#{analyzeBacking.fileTree.treeRoot}" 
+							var="node"
+							animate="true">
+							
+							<p:ajax event="expand" oncomplete="initDragDrop()" />  
+							
+							<p:treeNode expandedIcon="ui-icon-folder-open" collapsedIcon="ui-icon-folder-collapsed">
+								<h:outputText value="#{node}" />
+							</p:treeNode>
+							
+							<p:treeNode type="document" icon="ui-icon ui-icon-note">
+								<h:outputText value="#{node}"/>
+							</p:treeNode>
+							
+							<p:treeNode type="analysis" icon="ui-icon ui-icon-document">
+								<h:outputText value="#{node}"/>
+							</p:treeNode>
+							
+							<p:treeNode type="document_error" icon="ui-icon ui-icon-alert">
+								<h:outputText value="#{node}"/>
+							</p:treeNode>
+							
+							<p:treeNode type="eureka" icon="ui-icon-lightbulb">
+								<h:outputText value="#{node}"/>
+							</p:treeNode>
+							
+							<p:treeNode type="home" icon="ui-icon-home">
+								<h:outputText value="#{node}"/>
+							</p:treeNode>
+							
+						</p:tree>
+
+						<h:panelGroup layout="block">
+							<h3 class="ui-widget ui-widget-header ui-corner-all submenu-title" style="padding:5px 6px;">Analyze Instructions</h3>
+							<ol>
+								<li>Drag files or folders to the right.</li>
+								<li>Select algorithms from the list below</li>
+								<li>Click the "Start Analysis" button under the list on top right.</li>
+							</ol>
+						</h:panelGroup>
+							
+					</p:layoutUnit>
+				
+					<p:layoutUnit position="center"  >
+						 
+						<p:remoteCommand name="onComplete" action="#{analyzeBacking.onComplete}" update="@([id$=availableStudy]), @([id$=availableAlgorithmTable])"/>
+			    		
+			    		<p:layout >
+							<p:layoutUnit position="center">
+								
+								<div class="ui-widget-header ui-corner-all principalHeader">
+									<span class="panelHeaderText">Files to be Analyzed</span>
+									<p:commandButton id="startAnalysisButton" value="Start Analysis" 
+										icon="ui-icon-play"
+										action="#{analyzeBacking.startAnalysis}"
+										onclick="PF('dlg2').show();"/> 
+								</div>
+								
+							 	<p:dataTable id="availableStudy"
+									var="studyHolder"
+									rowIndexVar="index"
+									styleClass="analyzeDataTable"
+									sortMode="multiple"
+									value="#{analyzeBacking.tableList}"
+									resizableColumns="true"
+									paginatorPosition="top"
+									emptyMessage="No records. Drop your files here!">
+				
+									<p:column headerText="Subject ID" width="40%">
+										<h:outputText value="#{studyHolder.fileNode.data}" />
+									</p:column>
+				
+									<p:column headerText="File Format" width="15%">
+										<h:outputText value="#{studyHolder.documentRecord.originalFormat.label}" />
+									</p:column>
+				
+									<p:column headerText="File Date" width="38%">
+										<h:outputText value="#{studyHolder.fileNode.content.createDate}" />
+									</p:column>
+									<p:column headerText="Remove" width="7%">
+										<p:commandLink styleClass="ui-icon ui-icon-close dataTableCentered" update="availableStudy" actionListener="#{analyzeBacking.removeTableItem}" oncomplete="initDragDrop()">
+											<f:param name="index" value="#{index}"/>
+										</p:commandLink>
+									</p:column>
+								</p:dataTable>
+							</p:layoutUnit>
+							 	
+							<p:layoutUnit position="south" size="300" header="Available Algorithms" resizable="true" collapsible="true">
+								<p:remoteCommand name="updateAlgorithms" update="availableAlgorithmTable"/>
+					
+								<p:dataTable id="availableAlgorithmTable"
+									var="algorithm"
+									value="#{analyzeBacking.algorithmList.availableAlgorithms}"
+									rowKey="#{algorithm.displayShortName}"
+									selection="#{analyzeBacking.selectedAlgorithms}">
+									
+									<p:ajax event="rowSelectCheckbox" listener="#{analyzeBacking.onRowSelect}" update="@([id$=availableAlgorithmTable])"/>  
+					      			<p:ajax event="rowUnselectCheckbox" listener="#{analyzeBacking.onRowUnselect}" update="@([id$=availableAlgorithmTable])"/>  
+								
+									<p:column selectionMode="multiple" style="width:2%"/>
+									
+									<p:column headerText="Name" style="width:20%">  
+				          				<h:outputLabel value="#{algorithm.displayShortName}"
+				          					title="Provided by: #{algorithm.displayServiceName}"/> 
+				      				</p:column> 
+										
+									<p:column headerText="Help" style="width:5%">  
+				          				<h:commandLink id="documentationURL" onclick="open_helpwindow('#{algorithm.URLreference}'); return false;">
+										    <h:outputText value="Ref" />
+										</h:commandLink>
+				      				</p:column> 
+		
+									<p:column headerText="Description" style="width:73%">  
+				          				<h:outputLabel value="#{algorithm.toolTipDescription}" title="#{algorithm.displayLongDescription}"/>  
+				      				</p:column>
+				      				
+				      				<p:column headerText="Options">
+				      					<p:commandButton value="Options" onclick="updateDialog([{name: 'algorithmId', value: '#{algorithm.id}'}])" rendered="#{not empty algorithm.parameters}"/>
+				      					<p:rowToggler rendered="#{not empty algorithm.parameters and algorithm.hasSettedParameters}"/>
+									</p:column>
+				      				
+				
+				      				<p:rowExpansion>
+				      					<h:panelGroup id="panelParameterSet">
+				      						<p:panelGrid columns="4" layout="grid">
+				      							<p:dataList var="p" value="#{algorithm.parameters}" >
+													<h:outputText title="#{p.toolTipDescription}" value="(#{p.parameterFlag}) #{p.displayShortName} : #{p.parameterUserSpecifiedValue}"/>			      							
+				      							</p:dataList>
+											</p:panelGrid>
+				      					</h:panelGroup>
+				      				</p:rowExpansion> 	
+								</p:dataTable>
+							</p:layoutUnit>
+						</p:layout>
+							
+					</p:layoutUnit>
+					
+					<p:layoutUnit position="east" collapsible="true" header="Background Queue" resizable="false" collapsed="#{!analyzeBacking.showBackgroundPanel}" minSize="400" maxSize="400">
+					
+							<p:remoteCommand name="loadBackgroundQueue" action="#{analyzeBacking.loadBackgroundQueue}" update="divBackgroundQueuePanel"/>
+					    
+					    	<h:panelGroup layout="block" id="divBackgroundQueuePanel">
+					    	
+					    		<h:panelGroup layout="block" rendered="#{analyzeBacking.summary != null}" id="summary" styleClass="summary">
+						    		<span>#{analyzeBacking.summary}</span>
+							    	<p:commandLink styleClass="ui-icon ui-icon-close remove" oncomplete="removeAll();" update="backgroundQueue" actionListener="#{analyzeBacking.removeAllDoneItem}"/>
+							    </h:panelGroup>
+					    	
+						    	<p:dataTable id="backgroundQueue"
+										var="item"
+										rowIndexVar="index"
+										value="#{analyzeBacking.backgroundQueue}"
+										styleClass="backgroundQueueTable"
+										emptyMessage="No background process.">
+						    	
+						    		<p:column headerText="Subject" width="33%" styleClass="recordName">
+						    			<span><h:outputText value="#{item.recordName}" /></span>
+									</p:column>
+									
+									<p:column headerText="Algorithm" width="34%" styleClass="algorithms">
+						    			<span><h:outputText value="#{item.doneAnalysis + item.errorAnalysis} / #{item.totalAnalysis}" /></span>
+									</p:column>
+
+									<p:column headerText="Phase" width="33%" styleClass="queuePhaseColumn">
+										<h:panelGroup id="analysisPhase" styleClass="#{item.state}">
+											<h:outputText value="#{item.completed ? 'DONE' : 'Processing'}"  rendered="#{item.errorAnalysis == 0}"/>
+											<p:commandLink value="#{item.completed ? 'ERROR' : 'Processing'}" 	 rendered="#{item.errorAnalysis > 0 and item.errorAnalysis == item.totalAnalysis}" onclick="showErrorPanel(#{item.documentRecordId}, this);" />
+											<p:commandLink value="#{item.completed ? 'DONE' : 'Processing'}" rendered="#{item.errorAnalysis > 0 and item.errorAnalysis != item.totalAnalysis}" onclick="showErrorPanel(#{item.documentRecordId}, this);" />
+										</h:panelGroup>
+										<p:commandLink styleClass="ui-icon ui-icon-close" update="backgroundQueue" actionListener="#{analyzeBacking.removeBackgroundQueueItem}" rendered="#{item.completed}">
+											<f:param name="index" value="#{index}"/>
+										</p:commandLink>
+									</p:column>
+								</p:dataTable>
+				    	
+				    		</h:panelGroup>
+				   </p:layoutUnit>
+				</p:layout>
+				<script type="text/javascript">
+					initDragDrop();
+					startListening(true);
+				</script>
+			</h:panelGroup>
+			
+			<h:panelGroup rendered="#{analyzeBacking.user == null}">
+				<div class="signin">
+					Please <a href="/c/portal/login" rel="nofollow">Sign In</a>
+				</div>
+			</h:panelGroup>
+			
+		</h:form>
+	</h:panelGroup>
+
+	</h:body>
+</f:view>

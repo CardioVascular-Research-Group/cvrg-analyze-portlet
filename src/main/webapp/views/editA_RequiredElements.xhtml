@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+
+<f:view contentType="text/html" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:head />
+	<h:body>
+
+		<h:panelGroup id="requiredAttributesEdit" layout="block" styleClass="backgroundofContent">
+			<h:form id="formRequiredAttributesEdit">
+						<p:panelGrid id="requiredAttributesGrid" >
+							<p:row>
+								<p:column style="font-weight: bold;" headerText="Name">Display Name</p:column>
+								<p:column><h:inputText size="100" value="#{algorithmEditBacking.selectedAlgorithm.displayShortName}" /></p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;" >Algorithm ID</p:column>
+								<p:column><h:outputText size="100" value="#{algorithmEditBacking.selectedAlgorithm.id}" /></p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;" >Service ID</p:column>
+								<p:column><h:outputText value="#{algorithmEditBacking.selectedAlgorithm.serviceID}" /></p:column>
+							</p:row> 
+							<p:row>
+								<p:column style="font-weight: bold;" >Service Name</p:column>
+								<p:column>		
+									<h:selectOneMenu id="serviceSelect" 
+										value="#{algorithmEditBacking.selectedAlgorithm.serviceID}"  
+					 					required="true" 
+					 					requiredMessage="Server must be selected." 
+					 					maxlength="150"> 
+					 					
+										<f:selectItem itemLabel="Select One" itemValue="" />
+										   
+										<f:selectItems 
+											value="#{algorithmEditBacking.serviceList.availableServiceList}" 
+											var="service" 
+											itemLabel="#{service.displayServiceName}" 
+											itemValue="#{service.id}"/>   
+									</h:selectOneMenu>
+								
+								</p:column>
+							</p:row> 
+							<p:row>
+								<p:column style="font-weight: bold;" >Service Method</p:column>
+								<p:column><h:inputText size="100" value="#{algorithmEditBacking.selectedAlgorithm.serviceMethod}" /></p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;" >optional parameters count</p:column>
+								<p:column><h:outputText value="#{algorithmEditBacking.parameterCount}" /></p:column>
+							</p:row> 
+							<p:row>
+								<p:column style="font-weight: bold;" >Short Description</p:column>
+								<p:column><h:inputTextarea rows="3" cols="100" value="#{algorithmEditBacking.selectedAlgorithm.toolTipDescription}" /></p:column>
+							</p:row>
+							 <!-- 
+							<p:row>
+								<p:column style="font-weight: bold;" >Result Format</p:column>
+								<p:column>
+									<h:outputText value="#{algorithmEditBacking.selectedAlgorithm.type}" />
+									<h:selectOneRadio id="resultformatRadioButton" 
+										value="#{algorithmEditBacking.selectedAlgorithm.type}"
+										style="font-weight: bold;">
+										<f:selectItem itemLabel="WFDBAnnotation" itemValue="WFDBAnnotation"  />
+										<f:selectItem itemLabel="CSV" itemValue="CSV" />
+									</h:selectOneRadio>
+								</p:column>
+							</p:row> -->
+						</p:panelGrid>	
+			</h:form>
+		</h:panelGroup>
+
+	</h:body>
+</f:view>

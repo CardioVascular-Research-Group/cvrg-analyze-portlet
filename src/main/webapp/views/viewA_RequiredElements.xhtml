@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<f:view contentType="text/html" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:head />
+	<h:body>
+
+		<h:panelGroup id="requiredAttributesView" layout="block" styleClass="backgroundofContent">
+			<h:form id="formRequiredAttributesView">
+						<p:panelGrid id="requiredAttributesGrid" >
+							<p:row>
+								<p:column style="font-weight: bold;" >Display Name</p:column>
+								<p:column><h:outputText size="75" value="#{algorithmEditBacking.selectedAlgorithm.displayShortName}" /></p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;" >Service Name</p:column>
+								<p:column><h:outputText size="75" value="#{algorithm.selectedService.displayServiceName}" /></p:column>
+							</p:row> 
+							<p:row>
+								<p:column style="font-weight: bold;" >Service Method</p:column>
+								<p:column><h:outputText size="75" value="#{algorithmEditBacking.selectedAlgorithm.serviceMethod}" /></p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;" >Short Description</p:column>
+								<p:column><h:outputText rows="3" cols="75" value="#{algorithmEditBacking.selectedAlgorithm.toolTipDescription}" /></p:column>
+							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;" >Long Description</p:column>
+								<p:column><h:outputText rows="3" cols="75" value="#{algorithmEditBacking.selectedAlgorithm.displayLongDescription}" /></p:column>
+							</p:row>
+						</p:panelGrid>	
+			</h:form>
+		</h:panelGroup>
+
+	</h:body>
+</f:view>

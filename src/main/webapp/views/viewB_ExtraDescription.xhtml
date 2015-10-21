@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<f:view contentType="text/html" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:head />
+	<h:body>
+
+		<h:panelGroup id="longDescEdit" layout="block" styleClass="backgroundofContent">
+			<p:panelGrid id="longDescGrid" >
+				<p:row>
+					<p:column style="font-weight: bold;" >Licence</p:column>
+					<p:column><h:outputText rows="1"  cols="100" value="#{algorithmEditBacking.selectedAlgorithm.licence}"/></p:column>
+				</p:row>
+				<p:row>
+					<p:column style="font-weight: bold;" >Version (algorithm)</p:column>
+					<p:column><h:outputText  rows="1"  cols="100" value="#{algorithmEditBacking.selectedAlgorithm.versionIdAlgorithm}"/></p:column>
+				</p:row>
+				<p:row>
+					<p:column style="font-weight: bold;" >Documentation URL</p:column>
+					<p:column><h:outputText  rows="1"  cols="100" value="#{algorithmEditBacking.selectedAlgorithm.URLreference}"/></p:column>
+				</p:row>
+				<p:row>
+					<p:column style="font-weight: bold;" >Version (web service)</p:column>
+					<p:column><h:outputText  rows="1"  cols="100" value="#{algorithmEditBacking.selectedAlgorithm.versionIdWebService}"/></p:column>
+				</p:row>
+				<p:row>
+					<p:column style="font-weight: bold;" >Date (algorithm)</p:column>
+					<p:column><h:outputText  rows="1"  cols="100" value="#{algorithmEditBacking.selectedAlgorithm.dateAlgorithm}"/></p:column>
+				</p:row>
+				<p:row>
+					<p:column style="font-weight: bold;" >Date (web service)</p:column>
+					<p:column><h:outputText  rows="1"  cols="100" value="#{algorithmEditBacking.selectedAlgorithm.dateWebService}"/></p:column>
+				</p:row>
+				<p:row>
+					<p:column style="font-weight: bold;" >Documentation URL</p:column>
+					<p:column><h:outputText  rows="1"  cols="100" value="#{algorithmEditBacking.selectedAlgorithm.URLreference}"/></p:column>
+				</p:row>
+				
+			</p:panelGrid>	
+		</h:panelGroup>
+
+	</h:body>
+</f:view>
