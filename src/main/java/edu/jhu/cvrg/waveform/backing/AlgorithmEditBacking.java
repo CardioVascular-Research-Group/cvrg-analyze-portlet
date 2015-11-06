@@ -27,12 +27,14 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
 import com.liferay.portal.model.User;
 
+import edu.jhu.cvrg.analysis.vo.AnalysisResultType;
 import edu.jhu.cvrg.data.dto.AdditionalParametersDTO;
 import edu.jhu.cvrg.data.dto.AlgorithmDTO;
 import edu.jhu.cvrg.data.dto.ServiceDTO;
@@ -331,4 +333,12 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
 //	public void setSelectedServiceID(int selectedServiceID) {
 //		this.selectedServiceID = selectedServiceID;
 //	}
+	
+	public List<SelectItem> getResultTypes(){
+		List<SelectItem> result = new ArrayList<SelectItem>();
+		for (AnalysisResultType type : AnalysisResultType.values()) {
+			result.add(new SelectItem(type, type.name().replace('_', ' ')));
+		}
+		return result;
+	}
 }

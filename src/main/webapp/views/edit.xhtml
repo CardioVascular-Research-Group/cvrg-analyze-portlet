@@ -114,6 +114,14 @@
 								<p:column><h:outputText rows="3" cols="75" value="#{algorithmEditBacking.selectedAlgorithm.displayLongDescription}" /></p:column>
 							</p:row>
 							<p:row>
+								<p:column style="font-weight: bold;" >Output Format</p:column>
+								<p:column >
+									<h:selectOneMenu value="#{algorithmEditBacking.selectedAlgorithm.resultType}">
+										<f:selectItems value="#{algorithmEditBacking.resultTypes}" ></f:selectItems>
+									</h:selectOneMenu>
+								</p:column>
+							</p:row>
+							<p:row>
 								<p:column style="font-weight: bold;" colspan="4" >
 									<div align="center" class="ui-widget-header ui-corner-all">
 										Optional Extra details and functions
