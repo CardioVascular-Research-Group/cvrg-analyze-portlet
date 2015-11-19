@@ -10,7 +10,6 @@
 	<h:body>
 
 		<h:panelGroup id="requiredAttributesEdit" layout="block" styleClass="backgroundofContent">
-			<h:form id="formRequiredAttributesEdit">
 						<p:panelGrid id="requiredAttributesGrid" >
 							<p:row>
 								<p:column style="font-weight: bold;" headerText="Name">Display Name</p:column>
@@ -56,6 +55,14 @@
 								<p:column style="font-weight: bold;" >Short Description</p:column>
 								<p:column><h:inputTextarea rows="3" cols="100" value="#{algorithmEditBacking.selectedAlgorithm.toolTipDescription}" /></p:column>
 							</p:row>
+							<p:row>
+								<p:column style="font-weight: bold;" >Output Format</p:column>
+								<p:column >
+									<h:selectOneMenu value="#{algorithmEditBacking.selectedAlgorithm.resultType}">
+										<f:selectItems value="#{algorithmEditBacking.resultTypes}" ></f:selectItems>
+									</h:selectOneMenu>
+								</p:column>
+							</p:row>
 							 <!-- 
 							<p:row>
 								<p:column style="font-weight: bold;" >Result Format</p:column>
@@ -70,7 +77,6 @@
 								</p:column>
 							</p:row> -->
 						</p:panelGrid>	
-			</h:form>
 		</h:panelGroup>
 
 	</h:body>

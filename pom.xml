@@ -6,7 +6,7 @@
 	<artifactId>cvrg-analyze-portlet</artifactId>
 	<packaging>war</packaging>
 	<name>cvrg-analyze-portlet Portlet</name>
-	<version>1.1.0.1-SNAPSHOT</version>
+	<version>1.1.1.1-SNAPSHOT</version>
 	
 	<parent>
     	<groupId>edu.jhu.cvrg</groupId>
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>edu.jhu.cvrg</groupId>
 	  		<artifactId>cvrg-dataStorage</artifactId>
-	  		<version>1.4-SNAPSHOT</version>
+	  		<version>1.5-SNAPSHOT</version>
 	  		
 	  		<exclusions>
 				<exclusion>
@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>edu.jhu.cvrg</groupId>
 			<artifactId>cvrg-analysisHub</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>1.1.1-SNAPSHOT</version>
   		</dependency>
   		<dependency>
 			<groupId>org.apache.ws.commons.axiom</groupId>

@@ -27,22 +27,23 @@
 							title="Add a new Service entry to the database, Edit it using the edit buttons below."/>
 							
 				</div>
+				
+				<p:tabView  scrollable="false"  style="width:100%;" >
+					<p:tab title="Required Elements"  titletip="These elements must all be correctly entered in order for the analysis algortithm to be used by Waveform.">
+						<ui:include src="editA_RequiredElements.xhtml" />
+					</p:tab>
+					<p:tab title="Extra Details"  titletip="These elements provide documentation of the analysis algorithm.">
+						<ui:include src="editB_LongDescription.xhtml" />
+					</p:tab>
+					<p:tab title="Algorithm Options"  titletip="This allows advanced capabilities and options of an algorithm to be specified">
+						<ui:include src="editC_ParameterList.xhtml" />
+					</p:tab>
+					<p:tab title="Web Services ( #{p:component('webServiceEdit')} )" titletip="List of web services which contain algorithm methods.">
+						<ui:include src="editD_ServiceList.xhtml" />
+					</p:tab>
+				</p:tabView>
+				
 			</h:form>
-	
-			<p:tabView  scrollable="false"  style="width:100%;" >
-				<p:tab title="Required Elements"  titletip="These elements must all be correctly entered in order for the analysis algortithm to be used by Waveform.">
-					<ui:include src="editA_RequiredElements.xhtml" />
-				</p:tab>
-				<p:tab title="Extra Details"  titletip="These elements provide documentation of the analysis algorithm.">
-					<ui:include src="editB_LongDescription.xhtml" />
-				</p:tab>
-				<p:tab title="Algorithm Options"  titletip="This allows advanced capabilities and options of an algorithm to be specified">
-					<ui:include src="editC_ParameterList.xhtml" />
-				</p:tab>
-				<p:tab title="Web Services ( #{p:component('webServiceEdit')} )" titletip="List of web services which contain algorithm methods.">
-					<ui:include src="editD_ServiceList.xhtml" />
-				</p:tab>
-			</p:tabView>
 		</h:panelGroup>
 
 	</h:body>
