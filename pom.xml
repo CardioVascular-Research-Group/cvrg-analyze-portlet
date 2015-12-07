@@ -19,8 +19,12 @@
 		<dependency>
 			<groupId>edu.jhu.cvrg.waveform</groupId>
 			<artifactId>waveform-utilities</artifactId>
-			<version>1.4.0.3-SNAPSHOT</version>
+			<version>1.4.1.3-SNAPSHOT</version>
 			<exclusions>
+				<exclusion>
+					<groupId>commons-lang</groupId>
+					<artifactId>commons-lang</artifactId>
+				</exclusion>
 				<exclusion>
 					<artifactId>xercesImpl</artifactId>
 					<groupId>xerces</groupId>
