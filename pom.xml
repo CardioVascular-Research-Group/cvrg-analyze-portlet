@@ -6,7 +6,7 @@
 	<artifactId>cvrg-analyze-portlet</artifactId>
 	<packaging>war</packaging>
 	<name>cvrg-analyze-portlet Portlet</name>
-	<version>1.1.1.1-SNAPSHOT</version>
+	<version>1.2.1.1-SNAPSHOT</version>
 	
 	<parent>
     	<groupId>edu.jhu.cvrg</groupId>

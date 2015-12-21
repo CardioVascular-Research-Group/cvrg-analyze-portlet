@@ -35,8 +35,7 @@
 										>
 										
 										<!-- How this update works is explained at http://stackoverflow.com/questions/13499642/primefaces-cannot-find-component-with-identifier-outside-the-datatable  -->
-			 							 <p:ajax event="rowSelect" listener="#{algorithmEditBacking.onRowSelect}" update="@([id$=requiredAttributesGrid]), @([id$=serviceSelect]))" />    <!--  update=":#{p:component('requiredAttributesGrid')}" -->
-						      			  <!-- <p:ajax event="rowUnselect" listener="#{algorithmEditBacking.onRowUnselect}"  />  update="availableAlgorithmTable" -->
+			 							<p:ajax event="rowSelect" listener="#{algorithmEditBacking.onRowSelect}" update="@([id$=requiredAttributesGrid])" />   
 											
 			 							<p:column headerText="ID" width="5%">
 											<h:outputLabel 
@@ -74,9 +73,9 @@
 								<p:column colspan="4">
 									<div align="center" class="ui-widget-header ui-corner-all">
 										<p:commandButton value="Edit"
-	                					action="#{algorithmEditBacking.editRequiredElements()}" />
+	                					action="#{algorithmEditBacking.editRequiredElements()}"  />
 										<p:commandButton value="DELETE ALGORITHM"
-	                					action="#{algorithmEditBacking.editRequiredElements()}" />
+	                					actionListener="#{algorithmEditBacking.deleteAlgorithm()}" update="availableAlgorithmTable" />
 										<p:commandButton value="Add New Algorithm"
 	                					action="#{algorithmEditBacking.addNewAlgorithm()}" />
 									</div>
@@ -110,8 +109,8 @@
 							<p:row>
 								<p:column style="font-weight: bold;" >Short Description</p:column>
 								<p:column><h:outputText rows="3" cols="75" value="#{algorithmEditBacking.selectedAlgorithm.toolTipDescription}" /></p:column>
-								<p:column style="font-weight: bold;" >Long Description</p:column>
-								<p:column><h:outputText rows="3" cols="75" value="#{algorithmEditBacking.selectedAlgorithm.displayLongDescription}" /></p:column>
+								<p:column style="font-weight: bold;" rowspan="2">Long Description</p:column>
+								<p:column rowspan="2"><h:outputText rows="3" cols="75" value="#{algorithmEditBacking.selectedAlgorithm.displayLongDescription}" /></p:column>
 							</p:row>
 							<p:row>
 								<p:column style="font-weight: bold;" >Output Format</p:column>

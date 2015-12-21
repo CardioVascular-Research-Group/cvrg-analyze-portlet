@@ -9,112 +9,119 @@
 	<h:head />
 	<h:body>
 
-		<h:panelGroup id="webServiceEdit" layout="block" styleClass="backgroundofContent">
-			<h:form id="formAlgorithmEditWebService">
+		<h:panelGroup id="webServiceEdit" layout="block" styleClass="backgroundofContent" style="text-align: right;">
+			<p:commandButton id="BtnServiceAdd" value="Add New Service" style="margin: 0px 0px 5px 5px;"
+							onclick="updateServiceDialog([{name: 'serviceId', value: '0'}])"
+							title="Add a new Service entry to the database, Edit it using the edit buttons below."/>
+			<p:dataTable id="webServiceTable"
+				var="s"
+				value="#{algorithmEditBacking.serviceList.availableServiceList}"
+				rowKey="#{s.id}"
+				paginator="true" 
+				rows="20"
+				rowStyleClass="leftAlign"
+				rowIndexVar="indexService"
+				resizableColumns="true" 
+				resizable="false"										
+				collapsible="false" 
+				paginatorAlwaysVisible="false"
+				paginatorPosition="top"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15,20" 
+				emptyMessage="No parameter options found for this algorithm">
+				
+					<p:column headerText="ID" style="width:20px;">
+					<h:outputLabel 
+						value="#{s.id}"  
+						title="Web Service's ID in the database (Primary Key)" />
+				</p:column>
 
-	
-				<p:dataTable id="webServiceTable"
-					var="s"
-					value="#{algorithmEditBacking.serviceList.availableServiceList}"
-					rowKey="#{s.id}"
-					paginator="true" 
-					rows="20"
-					rowIndexVar="indexService"
-					resizableColumns="true" 
-					resizable="false"										
-					collapsible="false" 
-					paginatorAlwaysVisible="false"
-					paginatorPosition="top"
-					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-					rowsPerPageTemplate="5,10,15,20" 
-					emptyMessage="No parameter options found for this algorithm">
-					
-						<p:column headerText="ID" style="width:20px;">
-						<h:outputLabel 
-							value="#{s.id}"  
-							title="Web Service's ID in the database (Primary Key)" />
-					</p:column>
- 
-					<p:column headerText="Display Name" style="width:200px;">
-						<h:outputLabel 
-							value="#{s.displayServiceName}" 
-							title="Human friendly name of the service to be used by the UI when listing services."/>
-					</p:column>
+				<p:column headerText="Display Name" style="width:200px;">
+					<h:outputLabel 
+						value="#{s.displayServiceName}" 
+						title="Human friendly name of the service to be used by the UI when listing services."/>
+				</p:column>
 
-					<p:column headerText="Service's Name" style="width:250px;">
-						<h:outputLabel 
-							value="#{s.serviceName}" 
-							title="The web service’s name to be used in the URL when calling the service.   e.g. 'physionetAnalysisService'"/>
-					</p:column>
+				<p:column headerText="Service's Name" style="width:250px;">
+					<h:outputLabel 
+						value="#{s.serviceName}" 
+						title="The web service’s name to be used in the URL when calling the service.   e.g. 'physionetAnalysisService'"/>
+				</p:column>
 
-					<p:column headerText="URL">
-						<h:outputLabel 
-							value="#{s.url}"
-							title="URL of the web service."/>								
-					</p:column>
-					<p:column style="width:40px;">
-					    <p:commandButton id="BtnServiceEdit" value="Edit" type="button"/>
-						<p:overlayPanel id="serviceEditPanel" for="BtnServiceEdit" hideEffect="fold" showEffect="explode" showCloseIcon="true"
-							dismissable="false" dynamic="false" style="width:800px;height:250px" >
-							<p:panelGrid>
-							    <f:facet name="header">
-							        <p:row>
-							            <p:column colspan="2">Edit then Save</p:column>
-							        </p:row>												 
-							    </f:facet>   													
-											
-								<p:row>
-	 								<p:column width="50px" ><h:outputLabel value ="ID"/> </p:column>
-									<p:column >
-										<h:outputText 
-											value="#{s.id}" 
-											title="Web Service's ID in the database (Primary Key)"
-											size="25" />
-									 </p:column>
-			 					</p:row>
-								<p:row>
-	 								<p:column width="50px" ><h:outputLabel value ="Display Name"/></p:column>
-									<p:column >
-										<h:inputText 
-											value="#{s.displayServiceName}" 
-											title="Human friendly name of the service to be used by the UI when listing services."
-											size="15"/>
-									 </p:column>
-			 					</p:row>
+				<p:column headerText="URL">
+					<h:outputLabel 
+						value="#{s.url}"
+						title="URL of the web service."/>								
+				</p:column>
+				<p:column  style="width:50px;padding: 5px;">
+				    <p:commandButton id="btnServiceEdit" 	value="Edit" type="button" 	onclick="updateServiceDialog([{name: 'serviceId', value: '#{s.id}'}])" />
+				</p:column>
+			</p:dataTable>	
 			
-								<p:row>
-	 								<p:column width="50px" ><h:outputLabel value ="Service's Name"/></p:column>
-									<p:column >
-										<h:inputText 
-											value="#{s.serviceName}" 
-											title="The web service’s name to be used in the URL when calling the service.   e.g. 'physionetAnalysisService'"
-											size="250"/>
-									 </p:column>
-			 					</p:row>	
+			<p:remoteCommand name="updateServiceDialog" action="#{algorithmEditBacking.updateEditService}" update="serviceGrid" oncomplete="PF('serviceDlg').show();">
+				<f:param name="serviceId" value="0"/>
+			</p:remoteCommand>
+			
+			<p:dialog id="serviceDlg" header="Service" widgetVar="serviceDlg" modal="true" closeOnEscape="true" resizable="false" >
+					
+				<p:panelGrid id="serviceGrid" styleClass="leftAlign">
+				    <f:facet name="header">
+				        <p:row>
+				            <p:column colspan="2">Edit then Save</p:column>
+				        </p:row>												 
+				    </f:facet>   													
+								
+					<p:row>
+						<p:column width="50px" ><h:outputLabel value ="ID"/> </p:column>
+						<p:column >
+							<h:outputText 
+								value="#{algorithmEditBacking.editService.id}" 
+								title="Web Service's ID in the database (Primary Key)"
+								size="25" />
+						 </p:column>
+ 					</p:row>
+					<p:row>
+						<p:column width="50px" ><h:outputLabel value ="Display Name"/></p:column>
+						<p:column >
+							<h:inputText 
+								value="#{algorithmEditBacking.editService.displayServiceName}" 
+								title="Human friendly name of the service to be used by the UI when listing services."
+								size="15"/>
+						 </p:column>
+ 					</p:row>
 
-								<p:row>
-	 								<p:column width="50px" ><h:outputLabel value ="URL"/></p:column>
-									<p:column >
-										<h:inputText 
-											value="#{s.url}"
-											title="URL of the web service."
-											size="150"/>
-									 </p:column>
-			 					</p:row>
-									
-								<p:row>
-	 								<p:column width="50px" colspan="2">
-		 								<p:commandButton value="Save"
-                							action="#{algorithmEditBacking.updateService(s.id)}" 
-                							onclick="jQuery('serviceEditPanel').hide()" />
-									</p:column>
-			 					</p:row>
-									 
-               				</p:panelGrid>		
-  							</p:overlayPanel>						
-					</p:column>
-				</p:dataTable>	
-			</h:form>
+					<p:row>
+						<p:column width="50px" ><h:outputLabel value ="Service's Name"/></p:column>
+						<p:column >
+							<h:inputText 
+								value="#{algorithmEditBacking.editService.serviceName}" 
+								title="The web service’s name to be used in the URL when calling the service.   e.g. 'physionetAnalysisService'"
+								size="80"/>
+						 </p:column>
+ 					</p:row>	
+
+					<p:row>
+						<p:column width="50px" ><h:outputLabel value ="URL"/></p:column>
+						<p:column >
+							<h:inputText 
+								value="#{algorithmEditBacking.editService.url}"
+								title="URL of the web service."
+								size="80"/>
+						 </p:column>
+ 					</p:row>
+						
+					<f:facet name="footer">
+						<p:row>
+				            <p:column colspan="2" style="text-align: right;">
+				            	<p:commandButton value="Save" action="#{algorithmEditBacking.saveService}" oncomplete="PF('serviceDlg').hide();" update="webServiceEdit" rendered="#{algorithmEditBacking.editService.id == 0}"/>
+				            	
+				            	<p:commandButton value="Delete" action="#{algorithmEditBacking.deleteService}" oncomplete="PF('serviceDlg').hide();" update="webServiceEdit" rendered="#{algorithmEditBacking.editService.id != 0}"/>
+				            	<p:commandButton value="Update" action="#{algorithmEditBacking.saveService}" oncomplete="PF('serviceDlg').hide();" update="webServiceEdit" rendered="#{algorithmEditBacking.editService.id != 0}"/>
+							</p:column>
+				        </p:row>
+					</f:facet>
+				</p:panelGrid>		
+ 			</p:dialog>
 		</h:panelGroup>
 
 	</h:body>

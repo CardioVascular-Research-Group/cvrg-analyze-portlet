@@ -195,3 +195,7 @@ div.principalHeader{
 backgroundQueueTable{
 	width: 100%;
 }
+
+tr.leftAlign, td.leftAlign, table.leftAlign tr td{
+	text-align: left;
+}

@@ -130,7 +130,8 @@ public class AnalyzeBacking extends BackingBean implements Serializable {
 			grid.setId("gridOne"+algIndex);
 			grid.setBorder(4);
 			grid.setColumns(3);
-	
+			grid.setStyleClass("leftAlign");
+			
 			for(AdditionalParametersDTO p:paramList){
 				grid.getChildren().add(makeLabel("(" + p.getParameterFlag() + ") " + p.getDisplayShortName(), p.getToolTipDescription()));
 				

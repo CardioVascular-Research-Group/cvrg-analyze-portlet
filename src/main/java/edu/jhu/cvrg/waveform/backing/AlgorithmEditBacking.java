@@ -21,6 +21,7 @@ package edu.jhu.cvrg.waveform.backing;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -38,6 +39,7 @@ import edu.jhu.cvrg.analysis.vo.AnalysisResultType;
 import edu.jhu.cvrg.data.dto.AdditionalParametersDTO;
 import edu.jhu.cvrg.data.dto.AlgorithmDTO;
 import edu.jhu.cvrg.data.dto.ServiceDTO;
+import edu.jhu.cvrg.data.factory.ConnectionFactory;
 import edu.jhu.cvrg.data.util.DataStorageException;
 import edu.jhu.cvrg.waveform.utility.ResourceUtility;
 
@@ -48,8 +50,6 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
 	
 	private int selectedAlgorithmID=-1;
 	private AlgorithmDTO selectedAlgorithm;
-//	private int selectedServiceID;
-//	private Service selectedService;
 
 	private User userModel;
 	
@@ -57,10 +57,12 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
 	private ServiceList serviceList;
 	private int newServiceID;
 	private List<FacesMessage> messages;
-
+	
+	private AdditionalParametersDTO editParameter = new AdditionalParametersDTO();
+	private ServiceDTO editService = new ServiceDTO();
+	
 	@PostConstruct
 	public void init() {
-		// System.out.println("AlgorithmEditBacking.init()");
 		userModel = ResourceUtility.getCurrentUser();
 		if(userModel != null){
 			if(serviceList == null){
@@ -83,57 +85,27 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
 				}
 			}			
 			selectedAlgorithmID = getSelectedAlgorithm().getId();
-//			selectedServiceID = getSelectedAlgorithm().getServiceID();
-//			for(Service s:serviceList.getAvailableServiceList()){
-//				if(s.getId() == selectedServiceID){
-//					setSelectedService(s);
-//				}
-//			}			
-			
 		}
 	}
 
     public void onComplete() {
-    	
-    	int failed = 0;
-//    	List<String> messages = analysisManager.getMessages();
-//    	if(messages != null){
-//    		for (String m : messages) {
-//				this.messages.add(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Analysis Error", m));
-//			}
-//    		failed = messages.size();
-//    	}
-//    	
-//    	ResourceUtility.showMessages("Analysis Completed ["+analysisManager.getTotal()+" Analysis - "+failed+" fail(s)]", this.messages);
-//		tableList.clear();
-//		selectedAlgorithms = null;
-    	// System.out.println("AlgorithmEditBacking.onComplete algorithm:" + selectedAlgorithm.getDisplayShortName());
     	this.messages.clear();
     }
 
 
     public void onRowSelect(SelectEvent event) {  
-    	//Do not delete this method.  The listener is present to force a form submit on select.
-    	// System.out.println("AlgorithmEditBacking.onRowSelect() algorithm:" + ((Algorithm) event.getObject()).getDisplayShortName());
-//    	setSelectedAlgorithm((Algorithm) event.getObject());
     	this.getLog().info("selected:" + selectedAlgorithm.getDisplayShortName());
     	return;
     }  
   
     public void onRowUnselect(UnselectEvent event) {  
-    	//Do not delete this method.  The listener is present to force a form submit on un-select.
     	this.getLog().info("unselected:" + selectedAlgorithm.getDisplayShortName());
-
     	return;
-    }  
-    /********************** Button Click handlers ************************/
-    // template for 
-//    public void doAction() {
-//    	this.getLog().info("Done");
-//    }
+    }
     
+    /* ********************* Button Click handlers ************************/
     public String editRequiredElements(){
-    	this.getLog().info("+ nextView: editM_Tabpage"); 
+    	this.getLog().info("+ nextView: editM_Tabpage");
     	return "editM_Tabpage";
     }
 
@@ -145,14 +117,23 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
     	return "editM_Tabpage";
     }
 
-    /** Save the current algorithm edit and stays on current page.
-     * 
-     */
+    /** Adds a new (blank) algorithm entry to the database, then reloads the algorithm list, then opens the editing page (editM_Tabpage.xhtml) **/
+    public void deleteAlgorithm(){
+    	try {
+			ConnectionFactory.createConnection().deleteAlgorithm(this.getSelectedAlgorithmID());
+			initAlgorithmList(-1);
+
+		} catch (DataStorageException e) {
+			this.getLog().error(e.getMessage());
+		}
+    }
+
+    
+    /** Save the current algorithm edit and stays on current page.*/
     public void saveAlgorithm(){
     	this.getLog().info(" saveAlgorithm()");
     	if(selectedAlgorithmID>=0){
     		// edited existing algorithm
-//    		selectedAlgorithm.setServiceID(selectedServiceID);
     		algorithmList.updateAlgorithmToDB(selectedAlgorithm);
     	}else{
     		// new algorithm
@@ -160,69 +141,110 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
     	initAlgorithmList(selectedAlgorithmID);
     }
     
-
-    public void addParameter(){
-    	this.getLog().info(" addParameter()");
-    	AdditionalParametersDTO newParam = new AdditionalParametersDTO();
-    	newParam.setDisplayShortName("REPLACE");
-    	newParam.setLongDescription("REPLACE");
-    	newParam.setParameterFlag("REPLACE");
-    	newParam.setParameterDefaultValue("REPLACE");
-    	newParam.setType("text");
-    	
-    	algorithmList.addNewAlgorithmParameterToDB(newParam, getSelectedAlgorithm().getId());
-    	algorithmList.populateAlgorithmsFromDB();
-    }
-    
-
-    public void updateParameter(int id){
-    	this.getLog().info(" updateParameter(" + id + ")");
-    	for(AdditionalParametersDTO ap : selectedAlgorithm.getParameters()){
-    		if(ap.getId() == id){
-    	    	this.getLog().info(" name:" + ap.getDisplayShortName());
-    	    	this.getLog().info(" tooltip:" + ap.getToolTipDescription());
-    	    	this.getLog().info(" longDesc:" + ap.getLongDescription());
-    		
-    	    	algorithmList.updateAlgorithmParameterToDB(ap, getSelectedAlgorithm().getId());
-    	    	algorithmList.populateAlgorithmsFromDB();
-    	    	break;
+    public void saveParameter(){
+    	if(editParameter != null){
+    		int id = editParameter.getId();
+    		if(id == 0){
+    			this.getLog().info(" addParameter()");
+    			algorithmList.addNewAlgorithmParameterToDB(editParameter, getSelectedAlgorithm().getId());
+    	    }else{
+    			this.getLog().info(" updateParameter(" + id + ")");
+    			algorithmList.updateAlgorithmParameterToDB(editParameter, getSelectedAlgorithm().getId());
     		}
+    		
+    		try {
+    			this.getSelectedAlgorithm().setParameters(ConnectionFactory.createConnection().getAlgorithmParameterArray(getSelectedAlgorithm().getId()));
+			} catch (DataStorageException e) {
+				e.printStackTrace();
+			}
     	}
     }
     
-    
-    public void addService(){
-    	try {
-			this.getLog().info(" addService()");
-			String uiName = "REPLACE";
-			String wsName = "REPLACE";
-			String url = "REPLACE";
-			newServiceID = serviceList.addNewServiceToDB(uiName, wsName, url);
-			serviceList = new ServiceList(); // reload
-		} catch (DataStorageException e) {
-			e.printStackTrace();
-		}
-    }
-    
-    public void updateService(int id){
-    	this.getLog().info(" updateService(" + id + ")");
-    	try {
-			for(ServiceDTO sl:serviceList.getAvailableServiceList()){
-				if(sl.getId() == id){
-			    	this.getLog().info(" Display name:" + sl.getDisplayServiceName());
-			    	this.getLog().info(" Service's Name:" + sl.getServiceName());
-			    	this.getLog().info(" URL:" + sl.getUrl());
-				
-			    	serviceList.updateAlgorithmParameterToDB(sl);
-			    	algorithmList.populateAlgorithmsFromDB();
-			    	break;
+    public void updateEditParameter(){
+    	Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		int paramId = Integer.parseInt(params.get("parameterId"));
+		this.getLog().info("parameterId:" + paramId);
+		
+		if(paramId == 0){
+			editParameter = new AdditionalParametersDTO();
+		}else{
+			for (AdditionalParametersDTO p : this.getParameterList()) {
+				if(p.getId() == paramId){
+					editParameter = p;
+					break;
 				}
-			}
-		} catch (DataStorageException e) {
-			e.printStackTrace();
+			}	
 		}
+	}
+    
+    
+    public void removeParameter(){
+    	Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		long paramId = Long.parseLong(params.get("parameterId"));
+		this.getLog().info("parameterId:" + paramId);
+		
+		if(paramId != 0){
+			try {
+				ConnectionFactory.createConnection().deleteParameter(paramId);
+				this.getSelectedAlgorithm().setParameters(ConnectionFactory.createConnection().getAlgorithmParameterArray(getSelectedAlgorithm().getId()));
+			} catch (DataStorageException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+    
+    
+    public void saveService(){
+    	if(editService != null){
+    		int id = editService.getId();
+    		try {
+	    		if(id == 0){
+	    			this.getLog().info(" addService()");
+	    			serviceList.addNewServiceToDB(editService.getDisplayServiceName(), editService.getServiceName(), editService.getUrl());
+	    		}else{
+	    			this.getLog().info(" updateService(" + id + ")");
+	    			serviceList.updateAlgorithmParameterToDB(editService);
+	    		}
+	    		this.getServiceList().populateServiceListFromDB();
+			} catch (DataStorageException e) {
+				e.printStackTrace();
+			}
+    	}
     }
     
+    public void updateEditService(){
+    	Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		int serviceId = Integer.parseInt(params.get("serviceId"));
+		this.getLog().info("serviceId:" + serviceId);
+		
+		if(serviceId == 0){
+			editService = new ServiceDTO();
+		}else{
+			for (ServiceDTO s : this.getServiceList().getAvailableServiceList()) {
+				if(s.getId() == serviceId){
+					editService = s;
+					break;
+				}
+			}	
+		}
+	}
+    
+    public void deleteService(){
+    	if(editService != null){
+    		int id = editService.getId();
+    		try {
+	    		if(id == 0){
+	    			this.getLog().error(" unable to deleteService(). No id selected");
+	    		}else{
+	    			this.getLog().info(" deleteService(" + id + ")");
+	    			ConnectionFactory.createConnection().deleteservice(editService.getId());
+	    		}
+    			this.getServiceList().populateServiceListFromDB();
+			} catch (DataStorageException e) {
+				e.printStackTrace();
+			}
+    	}
+    }
     
 	/** Loads the main Algorithm listing view, the start of the edit mode, without saving.
      * Handles onclick event for the button "btnEditMain". 
@@ -230,7 +252,6 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
     public String loadMainEdit(){
 		return "edit";
     }
-    
     
 	/** Loads the edit screen for the Long algorithm description.
      * Handles onclick event for the button "btnEditLongDesc" in the edit.xhtml view.
@@ -261,7 +282,7 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
     	return "editD_ServiceList";
     }
     
-/******************** getters and setters **************************/    
+    /* ******************* getters and setters **************************/    
 	public int getSelectedAlgorithmID() {
 		return selectedAlgorithmID;
 	}
@@ -277,13 +298,6 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
 	public void setSelectedAlgorithm(AlgorithmDTO selectedAlgorithm) {
 		this.selectedAlgorithm = selectedAlgorithm;
 		this.selectedAlgorithmID = getSelectedAlgorithm().getId();
-		int serviceID = getSelectedAlgorithm().getServiceID();
-//		for (Service s:serviceList.getAvailableServiceList()){
-//			if(serviceID ==s.id) {
-//				this.selectedService = s;
-//			}
-//		}
-		// System.out.println("AlgorithmEditBacking.setSelectedAlgorithm() algorithm:" + selectedAlgorithm.getDisplayShortName());
 	}
 	
 	public int getParameterCount(){
@@ -298,10 +312,6 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
 	public ServiceDTO getSelectedService() {
 		return serviceList.getServiceByID(selectedAlgorithm.getServiceID());
 	}
-
-//	public void setSelectedService(Service selectedService) {
-//		this.selectedService = selectedService;
-//	}
 
 	public AlgorithmList getAlgorithmList() {
 		return algorithmList;
@@ -326,13 +336,6 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
 	public ServiceDTO getNewService() {
 		return serviceList.getServiceByID(newServiceID);
 	}
-
-//	public int getSelectedServiceID() {
-//		return selectedServiceID;
-//	}
-//	public void setSelectedServiceID(int selectedServiceID) {
-//		this.selectedServiceID = selectedServiceID;
-//	}
 	
 	public List<SelectItem> getResultTypes(){
 		List<SelectItem> result = new ArrayList<SelectItem>();
@@ -340,5 +343,21 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
 			result.add(new SelectItem(type, type.name().replace('_', ' ')));
 		}
 		return result;
+	}
+
+	public AdditionalParametersDTO getEditParameter() {
+		return editParameter;
+	}
+
+	public void setEditParameter(AdditionalParametersDTO newParameter) {
+		this.editParameter = newParameter;
+	}
+
+	public ServiceDTO getEditService() {
+		return editService;
+	}
+
+	public void setEditService(ServiceDTO editService) {
+		this.editService = editService;
 	}
 }

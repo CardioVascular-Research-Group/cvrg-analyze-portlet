@@ -141,7 +141,7 @@ public class AlgorithmList implements Serializable{
 
 			
 				int algorithmID = dbUtility.updateAlgorithm(alg.getId(), alg.getDisplayShortName(), alg.getServiceID(), 
-						alg.getServiceMethod(), alg.getToolTipDescription(), alg.getDisplayLongDescription());
+															alg.getServiceMethod(), alg.getToolTipDescription(), alg.getDisplayLongDescription(), alg.getResultType().name());
 //			persistAlgorithmParametersToDB(alg, algorithmID);
 		} catch (DataStorageException e) {
 			log.error("Error on Algorithm update. " + e.getMessage());

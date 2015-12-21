@@ -16,7 +16,7 @@
 			<p:remoteCommand name="updateDialog" action="#{analyzeBacking.generateParameterSetting}" update="optionsDlg" oncomplete="PF('optionsDlg').show();">
 				<f:param name="algorithmId" value="0"/>
 			</p:remoteCommand>
-			<p:dialog id="optionsDlg" header="Options" widgetVar="optionsDlg" modal="true" width="70%">
+			<p:dialog id="optionsDlg" header="Options" widgetVar="optionsDlg" modal="true" width="70%" closeOnEscape="true" resizable="false">
 				<h:panelGroup id="dialogContent"/>
 				<p:panel title="parameter settings" id="settingTab">
 					<p:commandButton id="BtnParamSave" value="Save" action="#{analyzeBacking.saveSelectedSettings}" oncomplete="updateAlgorithms()"/>

@@ -11,21 +11,19 @@
 
 		<h:panelGroup id="mainTabPanel" layout="block" styleClass="backgroundofContent">
 			<h:form id="formAlgorithmEditMenuTab">
-				<div align="center" class="ui-widget-header ui-corner-all">
-					<h:outputText  value="Editing #{algorithmEditBacking.selectedAlgorithm.displayShortName}" />
-					<p:commandButton value="Save"
-	             					action="#{algorithmEditBacking.saveAlgorithm()}" />
-					<p:commandButton id="btnEditMain" value="Back to List"
-							action="#{algorithmEditBacking.loadMainEdit}"
-							title="Return to the main algorithm edit view." />
-					<p:commandButton id="BtnParameterAdd" value="Add New Optional Parameter" 
-							action="#{algorithmEditBacking.addParameter}"
-							title="Add a new optional parameter entry to the database, Edit it using the edit buttons below."
-							/>							
-					<p:commandButton id="BtnServiceAdd" value="Add New Service" 
-							action="#{algorithmEditBacking.addService}"
-							title="Add a new Service entry to the database, Edit it using the edit buttons below."/>
-							
+				<div  class="ui-widget-header ui-corner-all" style="font-size: 13px;">
+					<SPAN style="float: left;margin: 5px;"> 
+						<h:outputText  value="Editing #{algorithmEditBacking.selectedAlgorithm.displayShortName}" /> 
+					</SPAN>
+					<div align="right">
+						
+						<p:commandButton id="btnEditMain" value="Back to List" style="margin:5px;"
+								action="#{algorithmEditBacking.loadMainEdit}"
+								title="Return to the main algorithm edit view." 
+								immediate="true"/>
+						<p:commandButton value="Save" style="margin:5px;"
+             					action="#{algorithmEditBacking.saveAlgorithm}" />
+					</div>
 				</div>
 				
 				<p:tabView  scrollable="false"  style="width:100%;" >
@@ -38,11 +36,10 @@
 					<p:tab title="Algorithm Options"  titletip="This allows advanced capabilities and options of an algorithm to be specified">
 						<ui:include src="editC_ParameterList.xhtml" />
 					</p:tab>
-					<p:tab title="Web Services ( #{p:component('webServiceEdit')} )" titletip="List of web services which contain algorithm methods.">
+					<p:tab title="Web Services" titletip="List of web services which contain algorithm methods.">
 						<ui:include src="editD_ServiceList.xhtml" />
 					</p:tab>
 				</p:tabView>
-				
 			</h:form>
 		</h:panelGroup>
 
