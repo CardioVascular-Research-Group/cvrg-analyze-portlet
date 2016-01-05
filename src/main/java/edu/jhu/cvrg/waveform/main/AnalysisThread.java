@@ -48,6 +48,12 @@ import edu.jhu.cvrg.waveform.utility.ECGAnalyzeProcessor;
 import edu.jhu.cvrg.waveform.utility.ServerUtility;
 import edu.jhu.cvrg.waveform.utility.WebServiceUtility;
 
+/**
+ * The class responsible to each individual analysis thread
+ * 
+ * @author avilard4
+ *
+ */
 public class AnalysisThread extends Thread{
 
 	private Map<String, Object> map;

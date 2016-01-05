@@ -51,14 +51,27 @@ import edu.jhu.cvrg.waveform.model.DocumentDragVO;
 import edu.jhu.cvrg.waveform.utility.ResourceUtility;
 import edu.jhu.cvrg.waveform.utility.ThreadController;
 import edu.jhu.cvrg.waveform.utility.WebServiceUtility;
-//import edu.jhu.cvrg.waveform.model.Algorithm;
 
+/**
+ * Class to manage/control all Analysis threads
+ * 
+ * @author avilard4
+ *
+ */
 public class AnalysisManager implements Serializable{
 
 	private static final long serialVersionUID = -6155747608247379918L;
 	
 	private ThreadController tController;
 	
+	/**
+	 * Initialize the analysis thread group
+	 * 
+	 * @param selectedNodes Selected documents to be analyzed
+	 * @param userId Logged user ID
+	 * @param selectedAlgorithms Selected algorithms
+	 * @return
+	 */
 	public boolean performAnalysis(List<DocumentDragVO> selectedNodes, long userId, AlgorithmDTO[] selectedAlgorithms ){
 		
 		try {
@@ -158,6 +171,7 @@ public class AnalysisManager implements Serializable{
 		return false;
 	}
 	
+	@Deprecated
 	private ArrayList<FSFile> getFileList(AlgorithmDTO algorithm, List<FSFile> subFiles) {
 		ArrayList<FSFile> retFiles = new ArrayList<FSFile>();
 		String needExtentions = "";
@@ -200,6 +214,7 @@ public class AnalysisManager implements Serializable{
 		return retFiles;
 	}
 
+	@Deprecated
 	private String retrievePrimaryData(String chesnokovSubjectIds, String chesnokovFiles, String uId) {
 
 		OMElement omeResult;

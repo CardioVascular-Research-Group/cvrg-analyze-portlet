@@ -3,13 +3,29 @@ package edu.jhu.cvrg.waveform.utility;
 import java.io.Serializable;
 import java.util.Collection;
 
+/**
+ * The thread controller. Responsible to manage the thread group and trigger threads based in the pool size.
+ * 
+ * @author avilard4
+ *
+ */
 public class ThreadController extends Thread implements Serializable{
 
 	private static final long serialVersionUID = 348093133316110634L;
 	
+	/**
+	 * The maximun pool size
+	 */
 	private static int threadPoolSize = 50;
+	
+	/**
+	 * The pool sleep time in millis.
+	 */
 	private static int threadPoolSleepTime = 500;
 	
+	/**
+	 * The group to handle all analysis thread
+	 */
 	private static ThreadGroup group = new ThreadGroup("AnalysisGlobalGroup");
 	
 	private Collection<? extends Thread> threads;
@@ -36,6 +52,9 @@ public class ThreadController extends Thread implements Serializable{
 		}
 	}
 	
+	/**
+	 * @return the number of active threads
+	 */
 	public int getThreadCount(){
 		return threads != null ? threads.size() : 0;
 	}

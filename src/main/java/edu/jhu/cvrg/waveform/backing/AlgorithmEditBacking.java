@@ -117,7 +117,7 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
     	return "editM_Tabpage";
     }
 
-    /** Adds a new (blank) algorithm entry to the database, then reloads the algorithm list, then opens the editing page (editM_Tabpage.xhtml) **/
+    /** delete the selected algorithm from the database, then reloads the algorithm list **/
     public void deleteAlgorithm(){
     	try {
 			ConnectionFactory.createConnection().deleteAlgorithm(this.getSelectedAlgorithmID());
@@ -141,6 +141,9 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
     	initAlgorithmList(selectedAlgorithmID);
     }
     
+    /**
+     * Add or Update the parameter from dialog
+     */
     public void saveParameter(){
     	if(editParameter != null){
     		int id = editParameter.getId();
@@ -160,6 +163,9 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
     	}
     }
     
+    /**
+     * Prepare the parameter to be showed in edit dialog
+     */
     public void updateEditParameter(){
     	Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		int paramId = Integer.parseInt(params.get("parameterId"));
@@ -177,7 +183,7 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
 		}
 	}
     
-    
+    /** delete the selected parameter from the database, then reloads the parameter list **/
     public void removeParameter(){
     	Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		long paramId = Long.parseLong(params.get("parameterId"));
@@ -193,7 +199,9 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
 		}
 	}
     
-    
+    /**
+     * Add or Update the Service from dialog
+     */
     public void saveService(){
     	if(editService != null){
     		int id = editService.getId();
@@ -212,6 +220,9 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
     	}
     }
     
+    /**
+     * Prepare the service to be showed in edit dialog
+     */
     public void updateEditService(){
     	Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		int serviceId = Integer.parseInt(params.get("serviceId"));
@@ -229,6 +240,7 @@ public class AlgorithmEditBacking extends BackingBean implements Serializable {
 		}
 	}
     
+    /** delete the selected service from the database, then reloads the service list **/
     public void deleteService(){
     	if(editService != null){
     		int id = editService.getId();

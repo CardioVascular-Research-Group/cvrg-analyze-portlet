@@ -102,6 +102,11 @@ public class AnalyzeBacking extends BackingBean implements Serializable {
 		// TODO: **** testing creating front end controls purely from Java, for parameter editing.
 	}
 
+	/**
+	 * Load the dialog with the select algorithm parameters
+	 * 
+	 * @param selectedAlgID Selected Algorithm ID
+	 */
 	private void loadParameterSetPanel(int selectedAlgID){
 		if (selectedAlgID != (-1)){
 			
@@ -252,6 +257,11 @@ public class AnalyzeBacking extends BackingBean implements Serializable {
 	}
 
 
+	/**
+	 * Validate the selected files and algorithms. At the end, perform the analysis. <br>
+	 * Start the background queue listener
+	 * 
+	 */
 	public void startAnalysis() {
 		messages.clear();
 
